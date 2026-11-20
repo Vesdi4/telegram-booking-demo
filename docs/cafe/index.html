@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kohvik Meri — Seaside Café, Tallinn</title>
+<meta name="description" content="Specialty coffee, fresh pastries and Baltic breakfasts by the sea in Tallinn.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1d2a33;--muted:#5b6b75;--sea:#1f6f8b;--sand:#f6efe4;--card:#fff;--accent:#e07a3f}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--sand);line-height:1.6}
+  a{color:inherit}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+  header{position:sticky;top:0;background:rgba(246,239,228,.92);backdrop-filter:blur(8px);z-index:10;border-bottom:1px solid #e6dccb}
+  nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{font-family:Fraunces,serif;font-weight:700;font-size:1.4rem;color:var(--sea);text-decoration:none}
+  nav ul{display:flex;gap:24px;list-style:none}
+  nav ul a{text-decoration:none;font-weight:500;color:var(--muted)}
+  nav ul a:hover{color:var(--sea)}
+  .btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:600;border:0;cursor:pointer;font-size:1rem}
+  .btn:hover{filter:brightness(.95)}
+  .btn.ghost{background:transparent;border:2px solid var(--sea);color:var(--sea)}
+  .hero{padding:96px 0 80px;background:linear-gradient(160deg,#cfe6ee 0%,var(--sand) 70%)}
+  .hero h1{font-family:Fraunces,serif;font-size:clamp(2.3rem,6vw,4rem);line-height:1.1;max-width:14ch}
+  .hero p{font-size:1.15rem;color:var(--muted);max-width:46ch;margin:20px 0 32px}
+  .hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+  section{padding:80px 0}
+  h2{font-family:Fraunces,serif;font-size:2.2rem;margin-bottom:12px}
+  .lead{color:var(--muted);margin-bottom:40px;max-width:60ch}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+  .card{background:var(--card);border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+  .item{display:flex;justify-content:space-between;gap:12px;font-weight:600}
+  .item span:last-child{color:var(--sea)}
+  .card p{color:var(--muted);font-size:.95rem;margin-top:6px}
+  .menu-cat{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:14px}
+  .menu-list > div{padding:12px 0;border-bottom:1px dashed #e6dccb}
+  .menu-list > div:last-child{border:0}
+  .about{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .photo{aspect-ratio:4/3;border-radius:20px;background:linear-gradient(135deg,#1f6f8b,#7fb7c9 60%,#f3d9b8);display:flex;align-items:flex-end;padding:20px;color:#fff;font-family:Fraunces,serif;font-size:1.3rem}
+  .reviews .card{font-style:italic}
+  .reviews .who{font-style:normal;font-weight:600;margin-top:12px;color:var(--ink)}
+  .stars{color:var(--accent);letter-spacing:2px}
+  form{display:grid;gap:14px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  label{font-size:.9rem;font-weight:500}
+  input,select,textarea{width:100%;padding:12px 14px;border:1px solid #d9cdb8;border-radius:10px;font:inherit;background:#fff;margin-top:4px}
+  .ok{display:none;background:#e3f3ea;color:#1c6b3f;padding:14px;border-radius:10px;font-weight:500}
+  .visit{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+  .hours div{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee}
+  .map{border-radius:16px;min-height:260px;background:repeating-linear-gradient(45deg,#dfe9ec,#dfe9ec 12px,#e9f1f3 12px,#e9f1f3 24px);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+  footer{background:var(--ink);color:#c9d3d9;padding:32px 0;font-size:.9rem}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  @media (max-width:760px){
+    nav ul{display:none}
+    .about,.visit,.row{grid-template-columns:1fr}
+    section{padding:56px 0}
+  }
+</style>
+</head>
+<body>
+<header>
+  <nav class="wrap">
+    <a class="logo" href="#">Kohvik Meri</a>
+    <ul>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#book">Book a table</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+    <a class="btn" href="#book">Reserve</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Slow mornings by the Baltic Sea.</h1>
+    <p>Specialty coffee roasted in Estonia, pastries baked every dawn, and a window seat looking out over Tallinn Bay.</p>
+    <div class="actions">
+      <a class="btn" href="#book">Book a table</a>
+      <a class="btn ghost" href="#menu">See the menu</a>
+    </div>
+  </div>
+</div>
+
+<section id="menu">
+  <div class="wrap">
+    <h2>Menu</h2>
+    <p class="lead">Seasonal, local and made in-house. Ask us about vegan and gluten-free options.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="menu-cat">Coffee</div>
+        <div class="menu-list">
+          <div><div class="item"><span>Espresso</span><span>€2.80</span></div></div>
+          <div><div class="item"><span>Flat white</span><span>€3.90</span></div></div>
+          <div><div class="item"><span>Oat cappuccino</span><span>€4.20</span></div></div>
+          <div><div class="item"><span>Filter of the day</span><span>€3.50</span></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="menu-cat">Breakfast</div>
+        <div class="menu-list">
+          <div><div class="item"><span>Rye toast & smoked salmon</span><span>€9.50</span></div><p>Estonian black bread, cream cheese, dill.</p></div>
+          <div><div class="item"><span>Kama bowl</span><span>€7.20</span></div><p>Traditional kama, kefir, berries, honey.</p></div>
+          <div><div class="item"><span>Shakshuka</span><span>€10.00</span></div><p>Two eggs, peppers, feta, sourdough.</p></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="menu-cat">Bakery</div>
+        <div class="menu-list">
+          <div><div class="item"><span>Cardamom bun</span><span>€3.40</span></div></div>
+          <div><div class="item"><span>Kringel slice</span><span>€3.20</span></div></div>
+          <div><div class="item"><span>Butter croissant</span><span>€2.90</span></div></div>
+          <div><div class="item"><span>Sea buckthorn cake</span><span>€5.50</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" style="background:#fff">
+  <div class="wrap about">
+    <div class="photo">Est. 2019 · Kalamaja</div>
+    <div>
+      <h2>Small café, big view.</h2>
+      <p class="lead" style="margin-bottom:16px">We started Kohvik Meri with one idea: the best seat in town should come with honest coffee. Our beans come from a roastery 20 minutes away, and our bakers start at 5 a.m. so you don't have to.</p>
+      <p class="lead">Dogs, laptops and long conversations are all welcome.</p>
+    </div>
+  </div>
+</section>
+
+<section class="reviews">
+  <div class="wrap">
+    <h2>What guests say</h2>
+    <p class="lead">Rated 4.8 from 600+ reviews.</p>
+    <div class="grid">
+      <div class="card"><div class="stars">★★★★★</div><p>"The cardamom buns alone are worth the trip. Lovely staff."</p><div class="who">Sample review</div></div>
+      <div class="card"><div class="stars">★★★★★</div><p>"Best flat white I had in Tallinn, and the sea view is unreal."</p><div class="who">Sample review</div></div>
+      <div class="card"><div class="stars">★★★★★</div><p>"Perfect spot for a slow Sunday breakfast."</p><div class="who">Sample review</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="book" style="background:#fff">
+  <div class="wrap" style="max-width:720px">
+    <h2>Book a table</h2>
+    <p class="lead">We'll confirm by email within an hour during opening times.</p>
+    <form id="bookForm">
+      <div class="row">
+        <label>Name<input required name="name" autocomplete="name"></label>
+        <label>Email<input required type="email" name="email" autocomplete="email"></label>
+      </div>
+      <div class="row">
+        <label>Date<input required type="date" name="date" id="date"></label>
+        <label>Time
+          <select required name="time">
+            <option value="">Choose…</option>
+            <option>08:00</option><option>09:00</option><option>10:00</option>
+            <option>11:00</option><option>12:00</option><option>13:00</option>
+            <option>14:00</option><option>15:00</option><option>16:00</option>
+          </select>
+        </label>
+      </div>
+      <label>Guests
+        <select name="guests"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select>
+      </label>
+      <label>Notes (optional)<textarea name="notes" rows="3" placeholder="Window seat, high chair, allergies…"></textarea></label>
+      <button class="btn" type="submit">Request booking</button>
+      <div class="ok" id="ok">Thanks! Your request is in. We'll email you a confirmation shortly.</div>
+    </form>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="wrap visit">
+    <div>
+      <h2>Visit us</h2>
+      <p class="lead" style="margin-bottom:20px">Kalaranna 1, Tallinn<br>+372 5555 0000 · tere@kohvikmeri.example</p>
+      <div class="hours">
+        <div><span>Mon – Fri</span><span>08:00 – 18:00</span></div>
+        <div><span>Saturday</span><span>09:00 – 18:00</span></div>
+        <div><span>Sunday</span><span>09:00 – 16:00</span></div>
+      </div>
+    </div>
+    <div class="map">Map embed goes here</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© Kohvik Meri — demo website (fictional business)</span>
+    <span>Instagram · Facebook</span>
+  </div>
+</footer>
+
+<script>
+  const d = document.getElementById('date');
+  d.min = new Date().toISOString().split('T')[0];
+  document.getElementById('bookForm').addEventListener('submit', e => {
+    e.preventDefault();
+    document.getElementById('ok').style.display = 'block';
+    e.target.querySelector('button').disabled = true;
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>North Cut — Book</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0e0f11;--panel:#17191c;--panel2:#1f2226;--line:#2a2e33;
+    --text:#f3f1ec;--muted:#8d939a;--gold:#d8b46a;--gold2:#f0d595;--ok:#4cc38a;--bad:#e5484d;
+    --r:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+  body{min-height:100vh;padding-bottom:110px;overscroll-behavior:none}
+  .top{padding:18px 18px 8px;position:sticky;top:0;background:linear-gradient(var(--bg) 80%,transparent);z-index:5}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--gold2),var(--gold) 50%,#9a7a3a);display:grid;place-items:center;font-weight:800;color:#1a1408;font-size:18px;box-shadow:0 6px 20px rgba(216,180,106,.25)}
+  .brand h1{font-size:18px;font-weight:700;letter-spacing:-.01em}
+  .brand p{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .rating{margin-left:auto;font-size:12.5px;color:var(--gold2);background:rgba(216,180,106,.1);padding:6px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
+  .steps{display:flex;gap:6px;margin-top:16px}
+  .steps i{flex:1;height:4px;border-radius:4px;background:var(--line);transition:background .35s}
+  .steps i.on{background:linear-gradient(90deg,var(--gold),var(--gold2))}
+  .stepname{font-size:12px;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+  main{padding:8px 18px}
+  h2{font-size:24px;font-weight:800;letter-spacing:-.02em;margin:6px 0 16px}
+  .screen{display:none;animation:in .35s ease}
+  .screen.show{display:block}
+  @keyframes in{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+
+  .svc{display:flex;gap:14px;align-items:center;background:var(--panel);border:1.5px solid transparent;border-radius:var(--r);padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .2s,transform .15s}
+  .svc:active{transform:scale(.98)}
+  .svc.sel{border-color:var(--gold);background:linear-gradient(180deg,rgba(216,180,106,.08),var(--panel))}
+  .svc .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:24px;flex:none}
+  .svc .t{font-weight:650;font-size:15.5px}
+  .svc .d{color:var(--muted);font-size:13px;margin-top:3px}
+  .svc .p{margin-left:auto;text-align:right;font-weight:700;font-size:16px}
+  .svc .p small{display:block;color:var(--muted);font-weight:500;font-size:12px;margin-top:3px}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;color:#1a1408;background:var(--gold);border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:2px;letter-spacing:.03em}
+
+  .pros{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .pro{background:var(--panel);border:1.5px solid transparent;border-radius:var(--r);padding:16px 12px;text-align:center;cursor:pointer;transition:border-color .2s,transform .15s}
+  .pro:active{transform:scale(.97)}
+  .pro.sel{border-color:var(--gold)}
+  .av{width:68px;height:68px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;font-weight:800;font-size:22px;color:#fff;position:relative}
+  .av::after{content:"";position:absolute;right:2px;bottom:2px;width:14px;height:14px;border-radius:50%;background:var(--ok);border:3px solid var(--panel)}
+  .pro .n{font-weight:650}
+  .pro .r{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .pro .s{font-size:12px;color:var(--gold2);margin-top:6px}
+  .pro.any .av{background:var(--panel2);color:var(--gold);font-size:26px}
+  .pro.any .av::after{display:none}
+
+  .dates{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;margin:0 -18px;padding-left:18px;scrollbar-width:none}
+  .dates::-webkit-scrollbar{display:none}
+  .date{flex:none;width:58px;padding:10px 0;border-radius:16px;background:var(--panel);text-align:center;cursor:pointer;border:1.5px solid transparent;transition:all .2s}
+  .date .w{font-size:11.5px;color:var(--muted);text-transform:uppercase;font-weight:600}
+  .date .dn{font-size:20px;font-weight:750;margin-top:4px}
+  .date .m{font-size:11px;color:var(--muted);margin-top:2px}
+  .date.sel{background:linear-gradient(160deg,var(--gold2),var(--gold));border-color:var(--gold)}
+  .date.sel .w,.date.sel .m,.date.sel .dn{color:#1a1408}
+  .date.off{opacity:.3;pointer-events:none}
+  .daypart{font-size:12.5px;color:var(--muted);font-weight:600;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.08em}
+  .slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .slot{padding:12px 0;border-radius:12px;background:var(--panel);text-align:center;font-weight:600;font-size:14.5px;cursor:pointer;border:1.5px solid transparent;transition:all .15s}
+  .slot.sel{border-color:var(--gold);color:var(--gold2);background:rgba(216,180,106,.1)}
+  .slot.taken{color:#4a4f55;text-decoration:line-through;pointer-events:none}
+  .free{font-size:12.5px;color:var(--ok);margin-left:6px;text-transform:none;letter-spacing:0;font-weight:500}
+
+  .sum{background:var(--panel);border-radius:var(--r);padding:16px;margin-bottom:16px}
+  .sum .row{display:flex;justify-content:space-between;padding:9px 0;font-size:14.5px;border-bottom:1px solid var(--line)}
+  .sum .row:last-child{border:0}
+  .sum .row span:first-child{color:var(--muted)}
+  .sum .row b{font-weight:650}
+  .total{font-size:18px!important}
+  .total b{color:var(--gold2)}
+  label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px;font-weight:500}
+  input,textarea{width:100%;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:14px;color:var(--text);font:inherit;font-size:15.5px;outline:none;transition:border-color .2s}
+  input:focus,textarea:focus{border-color:var(--gold)}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+
+  .cta{position:fixed;left:0;right:0;bottom:0;padding:14px 18px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%);z-index:9}
+  .cta button{width:100%;border:0;border-radius:16px;padding:17px;font:inherit;font-weight:700;font-size:16px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1408;box-shadow:0 8px 28px rgba(216,180,106,.3);cursor:pointer;transition:opacity .2s}
+  .cta button:disabled{opacity:.35;box-shadow:none}
+  body.tg .cta{display:none}
+  body.tg{padding-bottom:30px}
+
+  .done{text-align:center;padding-top:40px}
+  .check{width:96px;height:96px;margin:0 auto 20px;border-radius:50%;background:rgba(76,195,138,.12);display:grid;place-items:center}
+  .check svg{width:52px;height:52px;stroke:var(--ok);stroke-width:3;fill:none;stroke-dasharray:60;stroke-dashoffset:60;animation:draw .6s .1s forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand">
+    <div class="logo">NC</div>
+    <div><h1>North Cut Barbers</h1><p>Telliskivi 60 · Open 10–20</p></div>
+    <div class="rating">★ 4.9</div>
+  </div>
+  <div class="steps" id="steps"><i></i><i></i><i></i><i></i></div>
+  <div class="stepname" id="stepname"></div>
+</div>
+
+<main>
+  <section class="screen" data-name="Service">
+    <h2>What are we doing today?</h2>
+    <div id="services"></div>
+  </section>
+
+  <section class="screen" data-name="Barber">
+    <h2>Pick your barber</h2>
+    <div class="pros" id="pros"></div>
+  </section>
+
+  <section class="screen" data-name="Date & time">
+    <h2>When suits you?</h2>
+    <div class="dates" id="dates"></div>
+    <div id="slots"></div>
+  </section>
+
+  <section class="screen" data-name="Confirm">
+    <h2>Almost done</h2>
+    <div class="sum" id="sum"></div>
+    <label for="name">Your name</label>
+    <input id="name" autocomplete="name" placeholder="John">
+    <label for="phone">Phone</label>
+    <input id="phone" type="tel" autocomplete="tel" placeholder="+372 5xxx xxxx">
+    <label for="note">Note for the barber (optional)</label>
+    <input id="note" placeholder="e.g. skin fade, keep length on top">
+    <p class="hint">Free cancellation up to 2 hours before. You'll get a reminder in Telegram.</p>
+  </section>
+
+  <section class="screen" data-name="Done">
+    <div class="done">
+      <div class="check"><svg viewBox="0 0 52 52"><path d="M14 27l8 8 16-17" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h2>You're booked!</h2>
+      <p class="hint" id="donetext"></p>
+    </div>
+  </section>
+</main>
+
+<div class="cta"><button id="cta" disabled>Continue</button></div>
+
+<script>
+const SERVICES = [
+  {id:"cut",   name:"Classic haircut", desc:"Wash, cut & style", min:45, price:25, icon:"✂️", bg:"#2b2418"},
+  {id:"fade",  name:"Skin fade",       desc:"Precision fade, sharp finish", min:50, price:30, icon:"💈", bg:"#1d2530", tag:"POPULAR"},
+  {id:"beard", name:"Beard trim",      desc:"Shape, line-up & hot towel", min:30, price:18, icon:"🧔", bg:"#26201c"},
+  {id:"combo", name:"Cut + beard",     desc:"The full package", min:75, price:40, icon:"👑", bg:"#2a2214", tag:"BEST VALUE"},
+];
+const PROS = [
+  {id:"mark",  name:"Mark",  role:"Senior barber", rating:"4.9 · 312 reviews", c:"linear-gradient(135deg,#c2783a,#6e3b17)"},
+  {id:"liis",  name:"Liis",  role:"Fade specialist", rating:"5.0 · 198 reviews", c:"linear-gradient(135deg,#7a5cc2,#3a2a6e)"},
+  {id:"artur", name:"Artur", role:"Beard expert", rating:"4.8 · 254 reviews", c:"linear-gradient(135deg,#3a8fc2,#173f6e)"},
+];
+const TIMES = ["10:00","10:30","11:00","11:30","12:00","12:30","13:00","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00"];
+
+const tg = window.Telegram && Telegram.WebApp;
+const inTg = !!(tg && tg.initData);
+const params = new URLSearchParams(location.search);
+// taken = "mark|2026-11-21|10:00,liis|..."
+const TAKEN = new Set((params.get("taken")||"").split(",").filter(Boolean));
+const state = {step:0, service:null, pro:null, date:null, time:null};
+const $ = s => document.querySelector(s);
+const screens = [...document.querySelectorAll(".screen")];
+const haptic = (t="light") => { try{ tg.HapticFeedback.impactOccurred(t) }catch(e){} };
+const select = () => { try{ tg.HapticFeedback.selectionChanged() }catch(e){} };
+
+if (inTg) {
+  document.body.classList.add("tg");
+  tg.ready(); tg.expand();
+  try { tg.setHeaderColor("#0e0f11"); tg.setBackgroundColor("#0e0f11"); tg.setBottomBarColor && tg.setBottomBarColor("#0e0f11"); } catch(e){}
+  tg.MainButton.setParams({color:"#d8b46a", text_color:"#1a1408"});
+  tg.MainButton.onClick(next);
+  tg.BackButton.onClick(back);
+  const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
+  if (u) $("#name").value = [u.first_name, u.last_name].filter(Boolean).join(" ");
+}
+$("#cta").onclick = next;
+
+const fmtDate = d => d.toLocaleDateString("en-GB",{weekday:"short", day:"numeric", month:"short"});
+const iso = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const svc = () => SERVICES.find(s=>s.id===state.service);
+const pro = () => PROS.find(p=>p.id===state.pro);
+
+function isTaken(day, time){
+  if (state.pro === "any") return PROS.every(p => TAKEN.has(`${p.id}|${day}|${time}`));
+  return TAKEN.has(`${state.pro}|${day}|${time}`);
+}
+function isPast(day, time){
+  return new Date(`${day}T${time}:00`) < new Date(Date.now() + 30*60*1000);
+}
+
+function renderServices(){
+  $("#services").innerHTML = SERVICES.map(s => `
+    <div class="svc ${state.service===s.id?"sel":""}" data-id="${s.id}">
+      <div class="ic" style="background:${s.bg}">${s.icon}</div>
+      <div><div class="t">${s.name}${s.tag?`<span class="tag">${s.tag}</span>`:""}</div><div class="d">${s.desc}</div></div>
+      <div class="p">€${s.price}<small>${s.min} min</small></div>
+    </div>`).join("");
+  document.querySelectorAll(".svc").forEach(el => el.onclick = () => { state.service = el.dataset.id; select(); renderServices(); update(); });
+}
+
+function renderPros(){
+  const any = `<div class="pro any ${state.pro==="any"?"sel":""}" data-id="any"><div class="av">✦</div><div class="n">Any barber</div><div class="r">First available</div><div class="s">Fastest option</div></div>`;
+  $("#pros").innerHTML = PROS.map(p => `
+    <div class="pro ${state.pro===p.id?"sel":""}" data-id="${p.id}">
+      <div class="av" style="background:${p.c}">${p.name[0]}</div>
+      <div class="n">${p.name}</div><div class="r">${p.role}</div><div class="s">★ ${p.rating}</div>
+    </div>`).join("") + any;
+  document.querySelectorAll(".pro").forEach(el => el.onclick = () => { state.pro = el.dataset.id; state.time = null; select(); renderPros(); update(); });
+}
+
+function renderDates(){
+  const days = [];
+  for (let i=0;i<14;i++){ const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+i); days.push(d); }
+  if (!state.date) { const first = days.find(d => d.getDay()!==0 && TIMES.some(t => !isPast(iso(d),t) && !isTaken(iso(d),t))); state.date = first && iso(first); }
+  $("#dates").innerHTML = days.map(d => {
+    const k = iso(d), closed = d.getDay()===0;
+    return `<div class="date ${closed?"off":""} ${state.date===k?"sel":""}" data-d="${k}">
+      <div class="w">${d.toLocaleDateString("en-GB",{weekday:"short"})}</div><div class="dn">${d.getDate()}</div><div class="m">${d.toLocaleDateString("en-GB",{month:"short"})}</div></div>`;
+  }).join("");
+  document.querySelectorAll(".date").forEach(el => el.onclick = () => { state.date = el.dataset.d; state.time = null; select(); renderDates(); update(); });
+  renderSlots();
+}
+
+function renderSlots(){
+  const groups = [["Morning", t => t < "12:00"], ["Afternoon", t => t >= "12:00" && t < "17:00"], ["Evening", t => t >= "17:00"]];
+  const freeCount = TIMES.filter(t => !isPast(state.date,t) && !isTaken(state.date,t)).length;
+  $("#slots").innerHTML = groups.map(([label, f]) => {
+    const ts = TIMES.filter(f);
+    return `<div class="daypart">${label}${label==="Morning"?`<span class="free">· ${freeCount} slots free today</span>`:""}</div><div class="slots">` +
+      ts.map(t => { const bad = isPast(state.date,t) || isTaken(state.date,t);
+        return `<div class="slot ${bad?"taken":""} ${state.time===t?"sel":""}" data-t="${t}">${t}</div>`; }).join("") + `</div>`;
+  }).join("");
+  document.querySelectorAll(".slot").forEach(el => el.onclick = () => { state.time = el.dataset.t; haptic(); renderSlots(); update(); });
+}
+
+function pickPro(){
+  if (state.pro !== "any") return state.pro;
+  const free = PROS.find(p => !TAKEN.has(`${p.id}|${state.date}|${state.time}`));
+  return free ? free.id : PROS[0].id;
+}
+
+function renderSum(){
+  const s = svc(), p = state.pro==="any" ? {name:"First available"} : pro();
+  const d = new Date(state.date+"T12:00");
+  $("#sum").innerHTML = `
+    <div class="row"><span>Service</span><b>${s.icon} ${s.name}</b></div>
+    <div class="row"><span>Barber</span><b>${p.name}</b></div>
+    <div class="row"><span>When</span><b>${fmtDate(d)} · ${state.time}</b></div>
+    <div class="row"><span>Duration</span><b>${s.min} min</b></div>
+    <div class="row total"><span>Total</span><b>€${s.price}</b></div>`;
+}
+
+function canContinue(){
+  return [!!state.service, !!state.pro, !!(state.date && state.time),
+          $("#name").value.trim().length>1 && $("#phone").value.replace(/\D/g,"").length>=7][state.step];
+}
+
+function update(){
+  document.querySelectorAll("#steps i").forEach((el,i) => el.classList.toggle("on", i <= state.step));
+  $("#stepname").textContent = state.step < 4 ? `Step ${state.step+1} of 4 · ${screens[state.step].dataset.name}` : "Booked";
+  const ok = canContinue();
+  const label = state.step===3 ? `Book · €${svc().price}` : "Continue";
+  $("#cta").disabled = !ok; $("#cta").textContent = label; document.querySelector(".cta").style.display = state.step===4 ? "none" : "";
+  if (inTg){
+    if (state.step===4) { tg.MainButton.hide(); tg.BackButton.hide(); return; }
+    tg.MainButton.setText(label);
+    ok ? (tg.MainButton.enable(), tg.MainButton.show()) : (state.step===0 ? tg.MainButton.hide() : tg.MainButton.disable());
+    if (!ok && state.step>0) tg.MainButton.show();
+    state.step>0 ? tg.BackButton.show() : tg.BackButton.hide();
+  }
+}
+
+function show(i){
+  state.step = i;
+  screens.forEach((s,j) => s.classList.toggle("show", j===i));
+  if (i===0) renderServices();
+  if (i===1) renderPros();
+  if (i===2) renderDates();
+  if (i===3) renderSum();
+  window.scrollTo({top:0});
+  update();
+}
+
+function next(){
+  if (!canContinue()) return;
+  haptic("medium");
+  if (state.step < 3) return show(state.step+1);
+  const payload = {
+    service: state.service, pro: pickPro(), date: state.date, time: state.time,
+    name: $("#name").value.trim().slice(0,60), phone: $("#phone").value.trim().slice(0,30), note: $("#note").value.trim().slice(0,200)
+  };
+  if (inTg){ try{ tg.HapticFeedback.notificationOccurred("success") }catch(e){} tg.sendData(JSON.stringify(payload)); return; }
+  $("#donetext").textContent = `${svc().name} with ${PROS.find(p=>p.id===payload.pro).name}, ${fmtDate(new Date(state.date+"T12:00"))} at ${state.time}. Confirmation sent to Telegram.`;
+  show(4);
+}
+function back(){ if (state.step>0){ select(); show(state.step-1); } }
+
+["#name","#phone"].forEach(s => $(s).addEventListener("input", update));
+
+// Demo preview helpers: ?step=2 or ?demo=1 jumps ahead with sample choices (used for screenshots)
+const jump = +params.get("step");
+if (params.get("demo") || jump){ state.service="fade"; state.pro="liis"; }
+show(0);
+if (jump){
+  show(1);
+  if (jump>=2){ show(2); const f=[...document.querySelectorAll(".slot:not(.taken)")][2]; state.time=f&&f.dataset.t; renderSlots(); update(); }
+  if (jump>=3){ if(!$("#name").value) $("#name").value="Arseni"; $("#phone").value="+372 5123 4567"; $("#note").value="Skin fade, keep length on top"; show(3); }
+  if (jump>=4) next();
+}
+</script>
+</body>
+</html>
