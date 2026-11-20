@@ -3,59 +3,137 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kohvik Meri — Seaside Café, Tallinn</title>
-<meta name="description" content="Specialty coffee, fresh pastries and Baltic breakfasts by the sea in Tallinn.">
+<title>Kohvik Meri · Seaside café in Kalamaja, Tallinn</title>
+<meta name="description" content="Specialty coffee, pastries baked from 5 a.m. and Estonian breakfasts by the sea in Kalamaja, Tallinn.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--ink:#1d2a33;--muted:#5b6b75;--sea:#1f6f8b;--sand:#f6efe4;--card:#fff;--accent:#e07a3f}
+  /* Direction: unhurried, salty, homemade. World: Baltic shore at 7 a.m., grey-blue water, birch tables, rye.
+     Cool sea-grey ramp, petrol accent from the water, bake times in mono as the signature. */
+  :root{
+    --bg:#f3f5f5; --card:#ffffff; --raised:#e8eded; --deep:#14272e;
+    --line:rgba(20,39,46,.09); --line2:rgba(20,39,46,.16);
+    --text:#14272e; --text2:#4a5d63; --muted:#6a7b80;
+    --accent:#1f5a6b; --accent-ink:#ffffff; --accent-tint:#e2ecee;
+    --rye:#8a5a3b;
+    --sans:"Instrument Sans", system-ui, sans-serif;
+    --serif:Newsreader, Georgia, serif;
+    --mono:"JetBrains Mono", ui-monospace, monospace;
+    --ease:cubic-bezier(.22,1,.36,1);
+    color-scheme:light;
+  }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--sand);line-height:1.6}
+  body{font-family:var(--sans);color:var(--text);background:var(--bg);font-size:16px;line-height:1.55}
   a{color:inherit}
-  .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
-  header{position:sticky;top:0;background:rgba(246,239,228,.92);backdrop-filter:blur(8px);z-index:10;border-bottom:1px solid #e6dccb}
-  nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-  .logo{font-family:Fraunces,serif;font-weight:700;font-size:1.4rem;color:var(--sea);text-decoration:none}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+  header{position:sticky;top:0;z-index:10;background:rgba(243,245,245,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;gap:32px;height:64px}
+  .logo{font-family:var(--serif);font-size:22px;text-decoration:none;margin-right:auto}
   nav ul{display:flex;gap:24px;list-style:none}
-  nav ul a{text-decoration:none;font-weight:500;color:var(--muted)}
-  nav ul a:hover{color:var(--sea)}
-  .btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:600;border:0;cursor:pointer;font-size:1rem}
-  .btn:hover{filter:brightness(.95)}
-  .btn.ghost{background:transparent;border:2px solid var(--sea);color:var(--sea)}
-  .hero{padding:96px 0 80px;background:linear-gradient(160deg,#cfe6ee 0%,var(--sand) 70%)}
-  .hero h1{font-family:Fraunces,serif;font-size:clamp(2.3rem,6vw,4rem);line-height:1.1;max-width:14ch}
-  .hero p{font-size:1.15rem;color:var(--muted);max-width:46ch;margin:20px 0 32px}
-  .hero .actions{display:flex;gap:12px;flex-wrap:wrap}
-  section{padding:80px 0}
-  h2{font-family:Fraunces,serif;font-size:2.2rem;margin-bottom:12px}
-  .lead{color:var(--muted);margin-bottom:40px;max-width:60ch}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
-  .card{background:var(--card);border-radius:16px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-  .item{display:flex;justify-content:space-between;gap:12px;font-weight:600}
-  .item span:last-child{color:var(--sea)}
-  .card p{color:var(--muted);font-size:.95rem;margin-top:6px}
-  .menu-cat{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:14px}
-  .menu-list > div{padding:12px 0;border-bottom:1px dashed #e6dccb}
-  .menu-list > div:last-child{border:0}
-  .about{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-  .photo{aspect-ratio:4/3;border-radius:20px;background:linear-gradient(135deg,#1f6f8b,#7fb7c9 60%,#f3d9b8);display:flex;align-items:flex-end;padding:20px;color:#fff;font-family:Fraunces,serif;font-size:1.3rem}
-  .reviews .card{font-style:italic}
-  .reviews .who{font-style:normal;font-weight:600;margin-top:12px;color:var(--ink)}
-  .stars{color:var(--accent);letter-spacing:2px}
-  form{display:grid;gap:14px}
-  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  label{font-size:.9rem;font-weight:500}
-  input,select,textarea{width:100%;padding:12px 14px;border:1px solid #d9cdb8;border-radius:10px;font:inherit;background:#fff;margin-top:4px}
-  .ok{display:none;background:#e3f3ea;color:#1c6b3f;padding:14px;border-radius:10px;font-weight:500}
-  .visit{display:grid;grid-template-columns:1fr 1fr;gap:32px}
-  .hours div{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee}
-  .map{border-radius:16px;min-height:260px;background:repeating-linear-gradient(45deg,#dfe9ec,#dfe9ec 12px,#e9f1f3 12px,#e9f1f3 24px);display:flex;align-items:center;justify-content:center;color:var(--muted)}
-  footer{background:var(--ink);color:#c9d3d9;padding:32px 0;font-size:.9rem}
-  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
-  @media (max-width:760px){
+  nav ul a{text-decoration:none;font-size:15px;color:var(--text2);transition:color .15s var(--ease)}
+  nav ul a:hover{color:var(--text)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 20px;border-radius:10px;font:inherit;font-size:15px;font-weight:500;text-decoration:none;border:0;cursor:pointer;transition:background-color .15s var(--ease),transform .12s var(--ease)}
+  .btn:active{transform:scale(.98)}
+  .btn.primary{background:var(--text);color:#fff}
+  .btn.primary:hover{background:var(--accent)}
+  .btn.secondary{background:transparent;color:var(--text);box-shadow:inset 0 0 0 1px var(--line2)}
+  .btn.secondary:hover{background:var(--raised)}
+  .btn.small{height:36px;padding:0 16px}
+
+  /* hero: split, text left, the counter card right */
+  .hero{padding:96px 0 96px}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+  h1{font-family:var(--serif);font-weight:400;font-size:64px;line-height:1.04;letter-spacing:-.03em;max-width:12ch}
+  .lede{font-size:19px;line-height:30px;color:var(--text2);max-width:34rem;margin:24px 0 32px}
+  .actions{display:flex;gap:12px;flex-wrap:wrap}
+  .where{font-size:14px;color:var(--muted);margin-top:24px}
+
+  .counter{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 24px rgba(20,39,46,.06);overflow:hidden}
+  .counter header{position:static;background:none;backdrop-filter:none;display:flex;justify-content:space-between;align-items:baseline;padding:20px 24px 16px;border-bottom:1px solid var(--line)}
+  .counter h2{font-family:var(--sans);font-size:15px;font-weight:500;letter-spacing:0;margin:0}
+  .counter header span{font-size:13px;color:var(--muted)}
+  .bake{display:grid;grid-template-columns:56px 1fr auto;gap:16px;align-items:center;padding:16px 24px;border-bottom:1px solid var(--line)}
+  .bake:last-of-type{border-bottom:0}
+  .bake time{font-family:var(--mono);font-size:14px;color:var(--text2)}
+  .bake b{font-weight:500;display:block}
+  .bake small{font-size:13px;color:var(--muted)}
+  .bake .left{font-family:var(--mono);font-size:13px;color:var(--text2);text-align:right}
+  .bake.soon time,.bake.soon .left{color:var(--muted)}
+  .bake.gone{opacity:.5}
+  .bake.gone b{text-decoration:line-through}
+  .loaf{height:120px;background:var(--deep);position:relative;overflow:hidden}
+  .loaf canvas{display:block;width:100%;height:100%}
+  .loaf p{position:absolute;left:24px;bottom:16px;color:#d8e4e6;font-size:13px}
+  .loaf p .mono{color:#fff}
+
+  section{padding:96px 0}
+  .head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:40px;flex-wrap:wrap}
+  h2{font-family:var(--serif);font-weight:400;font-size:40px;line-height:1.1;letter-spacing:-.02em}
+  .head p{color:var(--text2);max-width:36rem}
+
+  .menu{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .sheet{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+  .sheet h3{font-size:15px;font-weight:500;color:var(--text2);margin-bottom:8px}
+  .item{padding:12px 0;border-top:1px solid var(--line)}
+  .item:first-of-type{border-top:0}
+  .item .top{display:flex;align-items:baseline;gap:8px}
+  .item .top span:first-child{font-weight:500}
+  .item .dots{flex:1;border-bottom:1px dotted var(--line2);transform:translateY(-4px)}
+  .item .p{font-family:var(--mono);font-size:15px}
+  .item p{font-size:14px;color:var(--muted);margin-top:4px}
+  .menu-note{font-size:14px;color:var(--muted);margin-top:16px}
+
+  .about{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+  .about .text p{color:var(--text2);margin-top:16px;max-width:34rem}
+  .facts{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;align-self:start}
+  .fact{background:var(--card);padding:24px}
+  .fact .v{font-family:var(--mono);font-size:28px;line-height:1}
+  .fact .l{font-size:14px;color:var(--muted);margin-top:8px}
+
+  .quotes{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:16px}
+  blockquote{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+  blockquote p{font-family:var(--serif);font-size:20px;line-height:1.35}
+  blockquote:first-child p{font-size:26px}
+  blockquote footer{font-size:14px;color:var(--muted)}
+
+  .booking .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:start}
+  .booking .side p{color:var(--text2);margin-top:16px}
+  form{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;display:grid;gap:16px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .f{display:flex;flex-direction:column;gap:8px}
+  label{font-size:14px;color:var(--text2)}
+  input,select,textarea{height:44px;padding:0 12px;border:1px solid var(--line2);border-radius:10px;font:inherit;font-size:15px;background:var(--bg);color:var(--text);transition:border-color .15s var(--ease)}
+  textarea{height:auto;padding:12px;resize:vertical}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+  .ok{background:var(--accent-tint);color:var(--accent);padding:12px 16px;border-radius:10px;font-size:15px}
+  form .btn{justify-self:start}
+
+  .visit .wrap{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+  .hours{margin-top:24px;border-top:1px solid var(--line)}
+  .hours div{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
+  .hours span:last-child{font-family:var(--mono);font-size:15px}
+  .hours .today{font-weight:500}
+  .contact{display:grid;gap:24px;align-content:start}
+  .contact div span{display:block;font-size:14px;color:var(--muted);margin-bottom:4px}
+  .contact div b{font-weight:400;font-size:18px}
+  .contact a{color:var(--accent)}
+
+  footer.site{background:var(--deep);color:#a9bcc1;padding:32px 0;font-size:14px}
+  footer.site .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+  @media (max-width:900px){
     nav ul{display:none}
-    .about,.visit,.row{grid-template-columns:1fr}
-    section{padding:56px 0}
+    .hero{padding:48px 0 64px}
+    .hero .wrap,.about .wrap,.booking .wrap,.visit .wrap{grid-template-columns:1fr;gap:40px}
+    h1{font-size:40px}
+    h2{font-size:32px}
+    section{padding:64px 0}
+    .menu,.quotes{grid-template-columns:1fr}
+    .row2{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -66,142 +144,179 @@
     <ul>
       <li><a href="#menu">Menu</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#book">Book a table</a></li>
       <li><a href="#visit">Visit</a></li>
     </ul>
-    <a class="btn" href="#book">Reserve</a>
+    <a class="btn primary small" href="#book">Book a table</a>
   </nav>
 </header>
 
 <div class="hero">
   <div class="wrap">
-    <h1>Slow mornings by the Baltic Sea.</h1>
-    <p>Specialty coffee roasted in Estonia, pastries baked every dawn, and a window seat looking out over Tallinn Bay.</p>
-    <div class="actions">
-      <a class="btn" href="#book">Book a table</a>
-      <a class="btn ghost" href="#menu">See the menu</a>
+    <div>
+      <h1>Breakfast by the sea in Kalamaja</h1>
+      <p class="lede">Coffee from a roastery twenty minutes away, pastries baked from five in the morning, and window tables that look out over Tallinn Bay.</p>
+      <div class="actions">
+        <a class="btn primary" href="#book">Book a table</a>
+        <a class="btn secondary" href="#menu">See the menu</a>
+      </div>
+      <p class="where">Kalaranna 1 · open today from 08:00</p>
     </div>
+
+    <aside class="counter" aria-label="Today at the counter">
+      <div class="loaf"><canvas id="sea" width="900" height="240" aria-hidden="true"></canvas><p>Bay this morning · <span class="mono">calm</span></p></div>
+      <header><h2>Out of the oven today</h2><span>updated by the bakers</span></header>
+      <div class="bake gone"><time>05:40</time><div><b>Butter croissants</b><small>first tray</small></div><span class="left">sold out</span></div>
+      <div class="bake"><time>06:30</time><div><b>Cardamom buns</b><small>the one people come for</small></div><span class="left">14 left</span></div>
+      <div class="bake"><time>07:10</time><div><b>Rye loaf</b><small>whole or sliced for toast</small></div><span class="left">6 left</span></div>
+      <div class="bake soon"><time>10:30</time><div><b>Kringel</b><small>second bake of the day</small></div><span class="left">soon</span></div>
+    </aside>
   </div>
 </div>
 
 <section id="menu">
   <div class="wrap">
-    <h2>Menu</h2>
-    <p class="lead">Seasonal, local and made in-house. Ask us about vegan and gluten-free options.</p>
-    <div class="grid">
-      <div class="card">
-        <div class="menu-cat">Coffee</div>
-        <div class="menu-list">
-          <div><div class="item"><span>Espresso</span><span>€2.80</span></div></div>
-          <div><div class="item"><span>Flat white</span><span>€3.90</span></div></div>
-          <div><div class="item"><span>Oat cappuccino</span><span>€4.20</span></div></div>
-          <div><div class="item"><span>Filter of the day</span><span>€3.50</span></div></div>
-        </div>
+    <div class="head">
+      <h2>Menu</h2>
+      <p>Seasonal and made here. Ask about vegan and gluten-free options.</p>
+    </div>
+    <div class="menu">
+      <div class="sheet">
+        <h3>Coffee</h3>
+        <div class="item"><div class="top"><span>Espresso</span><span class="dots"></span><span class="p">2.80</span></div></div>
+        <div class="item"><div class="top"><span>Flat white</span><span class="dots"></span><span class="p">3.90</span></div></div>
+        <div class="item"><div class="top"><span>Oat cappuccino</span><span class="dots"></span><span class="p">4.20</span></div></div>
+        <div class="item"><div class="top"><span>Filter of the day</span><span class="dots"></span><span class="p">3.50</span></div></div>
       </div>
-      <div class="card">
-        <div class="menu-cat">Breakfast</div>
-        <div class="menu-list">
-          <div><div class="item"><span>Rye toast & smoked salmon</span><span>€9.50</span></div><p>Estonian black bread, cream cheese, dill.</p></div>
-          <div><div class="item"><span>Kama bowl</span><span>€7.20</span></div><p>Traditional kama, kefir, berries, honey.</p></div>
-          <div><div class="item"><span>Shakshuka</span><span>€10.00</span></div><p>Two eggs, peppers, feta, sourdough.</p></div>
-        </div>
+      <div class="sheet">
+        <h3>Breakfast</h3>
+        <div class="item"><div class="top"><span>Rye toast, smoked salmon</span><span class="dots"></span><span class="p">9.50</span></div><p>Black bread, cream cheese, dill</p></div>
+        <div class="item"><div class="top"><span>Kama bowl</span><span class="dots"></span><span class="p">7.20</span></div><p>Kama, kefir, berries, honey</p></div>
+        <div class="item"><div class="top"><span>Shakshuka</span><span class="dots"></span><span class="p">10.00</span></div><p>Two eggs, peppers, feta, sourdough</p></div>
       </div>
-      <div class="card">
-        <div class="menu-cat">Bakery</div>
-        <div class="menu-list">
-          <div><div class="item"><span>Cardamom bun</span><span>€3.40</span></div></div>
-          <div><div class="item"><span>Kringel slice</span><span>€3.20</span></div></div>
-          <div><div class="item"><span>Butter croissant</span><span>€2.90</span></div></div>
-          <div><div class="item"><span>Sea buckthorn cake</span><span>€5.50</span></div></div>
-        </div>
+      <div class="sheet">
+        <h3>Bakery</h3>
+        <div class="item"><div class="top"><span>Cardamom bun</span><span class="dots"></span><span class="p">3.40</span></div></div>
+        <div class="item"><div class="top"><span>Kringel slice</span><span class="dots"></span><span class="p">3.20</span></div></div>
+        <div class="item"><div class="top"><span>Butter croissant</span><span class="dots"></span><span class="p">2.90</span></div></div>
+        <div class="item"><div class="top"><span>Sea buckthorn cake</span><span class="dots"></span><span class="p">5.50</span></div></div>
       </div>
     </div>
+    <p class="menu-note">Prices in euros</p>
   </div>
 </section>
 
-<section id="about" style="background:#fff">
-  <div class="wrap about">
-    <div class="photo">Est. 2019 · Kalamaja</div>
-    <div>
-      <h2>Small café, big view.</h2>
-      <p class="lead" style="margin-bottom:16px">We started Kohvik Meri with one idea: the best seat in town should come with honest coffee. Our beans come from a roastery 20 minutes away, and our bakers start at 5 a.m. so you don't have to.</p>
-      <p class="lead">Dogs, laptops and long conversations are all welcome.</p>
-    </div>
-  </div>
-</section>
-
-<section class="reviews">
+<section id="about" class="about">
   <div class="wrap">
-    <h2>What guests say</h2>
-    <p class="lead">Rated 4.8 from 600+ reviews.</p>
-    <div class="grid">
-      <div class="card"><div class="stars">★★★★★</div><p>"The cardamom buns alone are worth the trip. Lovely staff."</p><div class="who">Sample review</div></div>
-      <div class="card"><div class="stars">★★★★★</div><p>"Best flat white I had in Tallinn, and the sea view is unreal."</p><div class="who">Sample review</div></div>
-      <div class="card"><div class="stars">★★★★★</div><p>"Perfect spot for a slow Sunday breakfast."</p><div class="who">Sample review</div></div>
+    <div class="text">
+      <h2>A small café with the best seat in town</h2>
+      <p>We opened Kohvik Meri in 2019 with one idea: the window seat over the bay should come with honest coffee. Our beans come from a roastery twenty minutes away, and our bakers start at five so the first tray is warm when we open.</p>
+      <p>Dogs, laptops and long conversations are all welcome.</p>
+    </div>
+    <div class="facts">
+      <div class="fact"><div class="v">2019</div><div class="l">opened in Kalamaja</div></div>
+      <div class="fact"><div class="v">05:00</div><div class="l">bakers start</div></div>
+      <div class="fact"><div class="v">20 min</div><div class="l">to our roastery</div></div>
+      <div class="fact"><div class="v">2</div><div class="l">bakes a day, dawn and mid-morning</div></div>
     </div>
   </div>
 </section>
 
-<section id="book" style="background:#fff">
-  <div class="wrap" style="max-width:720px">
-    <h2>Book a table</h2>
-    <p class="lead">We'll confirm by email within an hour during opening times.</p>
+<section>
+  <div class="wrap">
+    <div class="head"><h2>From the guestbook</h2></div>
+    <div class="quotes">
+      <blockquote><p>The cardamom buns alone are worth the walk along the shore. Get there before ten.</p><footer>Kadri, Põhja-Tallinn</footer></blockquote>
+      <blockquote><p>Best flat white I had in Tallinn, and the view over the bay is unreal.</p><footer>Tom, visiting from Helsinki</footer></blockquote>
+      <blockquote><p>Our Sunday spot. Slow breakfast, kama bowl, nobody rushing you.</p><footer>Mari and Jaan</footer></blockquote>
+    </div>
+  </div>
+</section>
+
+<section id="book" class="booking">
+  <div class="wrap">
+    <div class="side">
+      <h2>Book a table</h2>
+      <p>We confirm by email within an hour while we are open. Walk-ins are welcome too, the window tables just go first.</p>
+    </div>
     <form id="bookForm">
-      <div class="row">
-        <label>Name<input required name="name" autocomplete="name"></label>
-        <label>Email<input required type="email" name="email" autocomplete="email"></label>
+      <div class="row2">
+        <div class="f"><label for="bname">Name</label><input id="bname" required name="name" autocomplete="name"></div>
+        <div class="f"><label for="bemail">Email</label><input id="bemail" required type="email" name="email" autocomplete="email"></div>
       </div>
-      <div class="row">
-        <label>Date<input required type="date" name="date" id="date"></label>
-        <label>Time
-          <select required name="time">
-            <option value="">Choose…</option>
-            <option>08:00</option><option>09:00</option><option>10:00</option>
-            <option>11:00</option><option>12:00</option><option>13:00</option>
-            <option>14:00</option><option>15:00</option><option>16:00</option>
+      <div class="row2">
+        <div class="f"><label for="date">Date</label><input required type="date" name="date" id="date"></div>
+        <div class="f"><label for="btime">Time</label>
+          <select id="btime" required name="time">
+            <option value="">Choose</option>
+            <option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option>
+            <option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option>
           </select>
-        </label>
+        </div>
       </div>
-      <label>Guests
-        <select name="guests"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6+</option></select>
-      </label>
-      <label>Notes (optional)<textarea name="notes" rows="3" placeholder="Window seat, high chair, allergies…"></textarea></label>
-      <button class="btn" type="submit">Request booking</button>
-      <div class="ok" id="ok">Thanks! Your request is in. We'll email you a confirmation shortly.</div>
+      <div class="f"><label for="bguests">Guests</label>
+        <select id="bguests" name="guests"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6 or more</option></select>
+      </div>
+      <div class="f"><label for="bnotes">Notes</label><textarea id="bnotes" name="notes" rows="3" placeholder="Window seat, high chair, allergies"></textarea></div>
+      <button class="btn primary" type="submit">Request a table</button>
+      <div class="ok" id="ok" hidden>Request received. We will email you a confirmation shortly.</div>
     </form>
   </div>
 </section>
 
-<section id="visit">
-  <div class="wrap visit">
+<section id="visit" class="visit">
+  <div class="wrap">
     <div>
       <h2>Visit us</h2>
-      <p class="lead" style="margin-bottom:20px">Kalaranna 1, Tallinn<br>+372 5555 0000 · tere@kohvikmeri.example</p>
-      <div class="hours">
-        <div><span>Mon – Fri</span><span>08:00 – 18:00</span></div>
-        <div><span>Saturday</span><span>09:00 – 18:00</span></div>
-        <div><span>Sunday</span><span>09:00 – 16:00</span></div>
+      <div class="hours" id="hours">
+        <div data-d="1,2,3,4,5"><span>Monday to Friday</span><span>08:00–18:00</span></div>
+        <div data-d="6"><span>Saturday</span><span>09:00–18:00</span></div>
+        <div data-d="0"><span>Sunday</span><span>09:00–16:00</span></div>
       </div>
     </div>
-    <div class="map">Map embed goes here</div>
+    <div class="contact">
+      <div><span>Address</span><b>Kalaranna 1, 10415 Tallinn</b><br><a href="https://www.google.com/maps/search/?api=1&query=Kalaranna+1+Tallinn" target="_blank" rel="noopener">Open in Google Maps</a></div>
+      <div><span>Phone</span><b class="mono">+372 5555 0000</b></div>
+      <div><span>Email</span><b>tere@kohvikmeri.example</b></div>
+    </div>
   </div>
 </section>
 
-<footer>
+<footer class="site">
   <div class="wrap">
-    <span>© Kohvik Meri — demo website (fictional business)</span>
-    <span>Instagram · Facebook</span>
+    <span>Kohvik Meri, Tallinn</span>
+    <span>Demo website for a fictional café · built by Arseni Savinov</span>
   </div>
 </footer>
 
 <script>
-  const d = document.getElementById('date');
-  d.min = new Date().toISOString().split('T')[0];
+  document.getElementById('date').min = new Date().toISOString().split('T')[0];
   document.getElementById('bookForm').addEventListener('submit', e => {
     e.preventDefault();
-    document.getElementById('ok').style.display = 'block';
+    document.getElementById('ok').hidden = false;
     e.target.querySelector('button').disabled = true;
   });
+  const today = new Date().getDay();
+  document.querySelectorAll('#hours div').forEach(r => { if (r.dataset.d.split(',').includes(String(today))) r.classList.add('today'); });
+
+  // The bay: a few slow horizontal swells drawn in the page's own colors
+  const c = document.getElementById('sea'), x = c.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function draw(t){
+    const w = c.width, h = c.height;
+    x.fillStyle = '#14272e'; x.fillRect(0,0,w,h);
+    for (let i = 0; i < 14; i++){
+      const y = 40 + i * 13, a = 0.05 + i * 0.012;
+      x.strokeStyle = `rgba(216,228,230,${a})`; x.lineWidth = 1.2;
+      x.beginPath();
+      for (let px = 0; px <= w; px += 8){
+        const yy = y + Math.sin(px / (90 + i * 6) + t / 2600 + i) * (2 + i * 0.35);
+        px ? x.lineTo(px, yy) : x.moveTo(px, yy);
+      }
+      x.stroke();
+    }
+    if (!reduce) requestAnimationFrame(draw);
+  }
+  draw(0);
 </script>
 </body>
 </html>

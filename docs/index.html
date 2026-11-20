@@ -3,143 +3,159 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<title>North Cut — Book</title>
+<title>North Cut Barbers</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Instrument+Serif&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  /* Direction: steady, exact, a bit old-school. World: the shop's appointment book and price board.
+     Warm-graphite ramp, one barber-pole red accent, mono for every time and price. */
   :root{
-    --bg:#0e0f11;--panel:#17191c;--panel2:#1f2226;--line:#2a2e33;
-    --text:#f3f1ec;--muted:#8d939a;--gold:#d8b46a;--gold2:#f0d595;--ok:#4cc38a;--bad:#e5484d;
-    --r:18px;
+    --deep:#121110; --bg:#161513; --card:#1c1a18; --raised:#262421;
+    --line:rgba(239,233,222,.08); --line2:rgba(239,233,222,.14);
+    --text:#efe9de; --text2:#aaa398; --muted:#8a847a;
+    --accent:#d4574a; --accent-tint:rgba(212,87,74,.12);
+    --ok:#4cc38a;
+    --sans:"Instrument Sans", system-ui, sans-serif;
+    --serif:"Instrument Serif", Georgia, serif;
+    --mono:"JetBrains Mono", ui-monospace, monospace;
+    --ease:cubic-bezier(.22,1,.36,1);
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html,body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
-  body{min-height:100vh;padding-bottom:110px;overscroll-behavior:none}
-  .top{padding:18px 18px 8px;position:sticky;top:0;background:linear-gradient(var(--bg) 80%,transparent);z-index:5}
-  .brand{display:flex;align-items:center;gap:12px}
-  .logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--gold2),var(--gold) 50%,#9a7a3a);display:grid;place-items:center;font-weight:800;color:#1a1408;font-size:18px;box-shadow:0 6px 20px rgba(216,180,106,.25)}
-  .brand h1{font-size:18px;font-weight:700;letter-spacing:-.01em}
-  .brand p{font-size:12.5px;color:var(--muted);margin-top:2px}
-  .rating{margin-left:auto;font-size:12.5px;color:var(--gold2);background:rgba(216,180,106,.1);padding:6px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
-  .steps{display:flex;gap:6px;margin-top:16px}
-  .steps i{flex:1;height:4px;border-radius:4px;background:var(--line);transition:background .35s}
-  .steps i.on{background:linear-gradient(90deg,var(--gold),var(--gold2))}
-  .stepname{font-size:12px;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
-  main{padding:8px 18px}
-  h2{font-size:24px;font-weight:800;letter-spacing:-.02em;margin:6px 0 16px}
-  .screen{display:none;animation:in .35s ease}
-  .screen.show{display:block}
-  @keyframes in{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+  html,body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.45}
+  body{min-height:100vh;padding-bottom:96px;overscroll-behavior:none}
+  body.tg{padding-bottom:24px}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 
-  .svc{display:flex;gap:14px;align-items:center;background:var(--panel);border:1.5px solid transparent;border-radius:var(--r);padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .2s,transform .15s}
-  .svc:active{transform:scale(.98)}
-  .svc.sel{border-color:var(--gold);background:linear-gradient(180deg,rgba(216,180,106,.08),var(--panel))}
-  .svc .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:24px;flex:none}
-  .svc .t{font-weight:650;font-size:15.5px}
-  .svc .d{color:var(--muted);font-size:13px;margin-top:3px}
-  .svc .p{margin-left:auto;text-align:right;font-weight:700;font-size:16px}
-  .svc .p small{display:block;color:var(--muted);font-weight:500;font-size:12px;margin-top:3px}
-  .tag{display:inline-block;font-size:10.5px;font-weight:700;color:#1a1408;background:var(--gold);border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:2px;letter-spacing:.03em}
+  .top{position:sticky;top:0;z-index:5;background:var(--bg);padding:16px 20px 12px;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .brand b{font-weight:600;font-size:17px}
+  .brand span{font-size:13px;color:var(--muted)}
+  .progress{display:flex;align-items:center;gap:12px;margin-top:12px}
+  .bars{display:flex;gap:4px;flex:1}
+  .bars i{flex:1;height:2px;border-radius:2px;background:var(--line2);transition:background-color .3s var(--ease)}
+  .bars i.on{background:var(--text2)}
+  .stepname{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
 
-  .pros{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .pro{background:var(--panel);border:1.5px solid transparent;border-radius:var(--r);padding:16px 12px;text-align:center;cursor:pointer;transition:border-color .2s,transform .15s}
-  .pro:active{transform:scale(.97)}
-  .pro.sel{border-color:var(--gold)}
-  .av{width:68px;height:68px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;font-weight:800;font-size:22px;color:#fff;position:relative}
-  .av::after{content:"";position:absolute;right:2px;bottom:2px;width:14px;height:14px;border-radius:50%;background:var(--ok);border:3px solid var(--panel)}
-  .pro .n{font-weight:650}
-  .pro .r{font-size:12.5px;color:var(--muted);margin-top:3px}
-  .pro .s{font-size:12px;color:var(--gold2);margin-top:6px}
-  .pro.any .av{background:var(--panel2);color:var(--gold);font-size:26px}
-  .pro.any .av::after{display:none}
+  main{padding:24px 20px 0}
+  h1{font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.1;letter-spacing:-.01em;margin-bottom:20px}
+  .screen{display:none}
+  .screen.show{display:block;animation:rise .32s var(--ease)}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.screen.show{animation:none}}
 
-  .dates{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 12px;margin:0 -18px;padding-left:18px;scrollbar-width:none}
+  /* list rows shared by services and barbers */
+  .list{display:flex;flex-direction:column;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px}
+  .row{display:grid;grid-template-columns:20px 1fr auto;align-items:center;gap:12px;min-height:64px;padding:12px;border-radius:12px;text-align:left;width:100%;transition:background-color .15s var(--ease),transform .12s var(--ease)}
+  .row:hover{background:var(--raised)}
+  .row:active{transform:scale(.985)}
+  .row:focus-visible,.date:focus-visible,.slot:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .row.sel{background:var(--raised);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+  .radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--muted);display:grid;place-items:center}
+  .row.sel .radio{border-color:var(--accent)}
+  .row.sel .radio::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent)}
+  .row .t{font-size:15px;font-weight:500}
+  .row .d{font-size:13px;color:var(--text2);margin-top:2px}
+  .row .price{font-family:var(--mono);font-size:15px;text-align:right}
+  .row .price small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+  .note{font-size:13px;color:var(--muted);margin-top:12px;padding:0 4px}
+
+  .pro{grid-template-columns:20px 40px 1fr auto}
+  .av{width:40px;height:40px;border-radius:50%;background:var(--raised);border:1px solid var(--line2);display:grid;place-items:center;font-weight:500;color:var(--text2)}
+  .row.sel .av{background:var(--card)}
+  .next{font-family:var(--mono);font-size:12px;color:var(--text2);text-align:right}
+  .next small{display:block;color:var(--muted)}
+
+  .dates{display:flex;gap:8px;overflow-x:auto;margin:0 -20px 24px;padding:0 20px 4px;scrollbar-width:none}
   .dates::-webkit-scrollbar{display:none}
-  .date{flex:none;width:58px;padding:10px 0;border-radius:16px;background:var(--panel);text-align:center;cursor:pointer;border:1.5px solid transparent;transition:all .2s}
-  .date .w{font-size:11.5px;color:var(--muted);text-transform:uppercase;font-weight:600}
-  .date .dn{font-size:20px;font-weight:750;margin-top:4px}
-  .date .m{font-size:11px;color:var(--muted);margin-top:2px}
-  .date.sel{background:linear-gradient(160deg,var(--gold2),var(--gold));border-color:var(--gold)}
-  .date.sel .w,.date.sel .m,.date.sel .dn{color:#1a1408}
-  .date.off{opacity:.3;pointer-events:none}
-  .daypart{font-size:12.5px;color:var(--muted);font-weight:600;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.08em}
-  .slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-  .slot{padding:12px 0;border-radius:12px;background:var(--panel);text-align:center;font-weight:600;font-size:14.5px;cursor:pointer;border:1.5px solid transparent;transition:all .15s}
-  .slot.sel{border-color:var(--gold);color:var(--gold2);background:rgba(216,180,106,.1)}
-  .slot.taken{color:#4a4f55;text-decoration:line-through;pointer-events:none}
-  .free{font-size:12.5px;color:var(--ok);margin-left:6px;text-transform:none;letter-spacing:0;font-weight:500}
+  .date{flex:none;width:56px;height:72px;border-radius:12px;background:var(--card);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:background-color .15s var(--ease),border-color .15s var(--ease)}
+  .date .w{font-size:12px;color:var(--muted)}
+  .date .dn{font-family:var(--mono);font-size:18px}
+  .date.sel{background:var(--text);border-color:var(--text)}
+  .date.sel .w,.date.sel .dn{color:var(--bg)}
+  .date.off{opacity:.35;pointer-events:none}
 
-  .sum{background:var(--panel);border-radius:var(--r);padding:16px;margin-bottom:16px}
-  .sum .row{display:flex;justify-content:space-between;padding:9px 0;font-size:14.5px;border-bottom:1px solid var(--line)}
-  .sum .row:last-child{border:0}
-  .sum .row span:first-child{color:var(--muted)}
-  .sum .row b{font-weight:650}
-  .total{font-size:18px!important}
-  .total b{color:var(--gold2)}
-  label{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px;font-weight:500}
-  input,textarea{width:100%;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:14px;color:var(--text);font:inherit;font-size:15.5px;outline:none;transition:border-color .2s}
-  input:focus,textarea:focus{border-color:var(--gold)}
-  .hint{font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.5}
+  .book{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .part{display:grid;grid-template-columns:88px 1fr;border-top:1px solid var(--line)}
+  .part:first-child{border-top:0}
+  .part h3{font-size:13px;font-weight:400;color:var(--muted);padding:16px 0 0 16px}
+  .part h3 small{display:block;font-family:var(--mono);font-size:12px;margin-top:4px}
+  .slots{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:8px 8px 8px 0}
+  .slot{height:40px;border-radius:8px;font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums;color:var(--text);transition:background-color .15s var(--ease),color .15s var(--ease)}
+  .slot:hover{background:var(--raised)}
+  .slot.sel{background:var(--accent-tint);color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+  .slot.taken{color:var(--muted);opacity:.45;text-decoration:line-through;pointer-events:none}
 
-  .cta{position:fixed;left:0;right:0;bottom:0;padding:14px 18px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%);z-index:9}
-  .cta button{width:100%;border:0;border-radius:16px;padding:17px;font:inherit;font-weight:700;font-size:16px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1408;box-shadow:0 8px 28px rgba(216,180,106,.3);cursor:pointer;transition:opacity .2s}
-  .cta button:disabled{opacity:.35;box-shadow:none}
+  /* signature: printed appointment card */
+  .ticket{display:grid;grid-template-columns:1fr 88px;background:var(--text);color:#1f1b16;border-radius:14px;position:relative;margin-bottom:24px}
+  .ticket .main{padding:20px}
+  .ticket .lbl{font-family:var(--mono);font-size:12px;color:#7b7266}
+  .ticket .when{font-family:var(--mono);font-size:28px;line-height:1;margin:8px 0 4px;font-variant-numeric:tabular-nums}
+  .ticket .day{font-size:15px}
+  .ticket .what{font-size:14px;color:#5e554a;margin-top:16px;padding-top:12px;border-top:1px solid rgba(31,27,22,.12)}
+  .ticket .stub{border-left:1.5px dashed rgba(31,27,22,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:12px}
+  .ticket .stub b{font-family:var(--mono);font-weight:500;font-size:20px}
+  .ticket::before,.ticket::after{content:"";position:absolute;right:79px;width:18px;height:18px;border-radius:50%;background:var(--bg)}
+  .ticket::before{top:-9px}.ticket::after{bottom:-9px}
+
+  .field{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+  label{font-size:13px;color:var(--text2)}
+  input{height:48px;background:var(--card);border:1px solid var(--line2);border-radius:10px;padding:0 14px;color:var(--text);font:inherit;outline:none;transition:border-color .15s var(--ease)}
+  input:focus{border-color:var(--text2)}
+  input::placeholder{color:var(--muted)}
+  .fine{font-size:13px;color:var(--muted);margin-top:4px}
+
+  .cta{position:fixed;left:0;right:0;bottom:0;padding:12px 20px calc(12px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line);z-index:9}
+  .cta button{width:100%;height:48px;border-radius:10px;background:var(--text);color:var(--bg);font-weight:500;font-size:15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.4);transition:opacity .15s var(--ease),transform .12s var(--ease)}
+  .cta button:active{transform:scale(.98)}
+  .cta button:disabled{opacity:.3}
+  .cta button .mono{margin-left:8px;opacity:.7}
   body.tg .cta{display:none}
-  body.tg{padding-bottom:30px}
 
-  .done{text-align:center;padding-top:40px}
-  .check{width:96px;height:96px;margin:0 auto 20px;border-radius:50%;background:rgba(76,195,138,.12);display:grid;place-items:center}
-  .check svg{width:52px;height:52px;stroke:var(--ok);stroke-width:3;fill:none;stroke-dasharray:60;stroke-dashoffset:60;animation:draw .6s .1s forwards}
-  @keyframes draw{to{stroke-dashoffset:0}}
+  .done p{color:var(--text2);margin:-8px 0 24px}
+  .done .ok{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ok);margin-bottom:12px}
+  .done .ok svg{width:16px;height:16px}
 </style>
 </head>
 <body>
-<div class="top">
-  <div class="brand">
-    <div class="logo">NC</div>
-    <div><h1>North Cut Barbers</h1><p>Telliskivi 60 · Open 10–20</p></div>
-    <div class="rating">★ 4.9</div>
-  </div>
-  <div class="steps" id="steps"><i></i><i></i><i></i><i></i></div>
-  <div class="stepname" id="stepname"></div>
-</div>
+<header class="top">
+  <div class="brand"><b>North Cut</b><span id="open">Telliskivi 60 · open until 20:00</span></div>
+  <div class="progress"><div class="bars" id="bars"><i></i><i></i><i></i><i></i></div><span class="stepname" id="stepname"></span></div>
+</header>
 
 <main>
-  <section class="screen" data-name="Service">
-    <h2>What are we doing today?</h2>
-    <div id="services"></div>
+  <section class="screen">
+    <h1>Choose a service</h1>
+    <div class="list" id="services"></div>
+    <p class="note">Card or cash at the shop. Nothing to pay now.</p>
   </section>
 
-  <section class="screen" data-name="Barber">
-    <h2>Pick your barber</h2>
-    <div class="pros" id="pros"></div>
+  <section class="screen">
+    <h1>Choose a barber</h1>
+    <div class="list" id="pros"></div>
   </section>
 
-  <section class="screen" data-name="Date & time">
-    <h2>When suits you?</h2>
+  <section class="screen">
+    <h1>Choose a time</h1>
     <div class="dates" id="dates"></div>
-    <div id="slots"></div>
+    <div class="book" id="slots"></div>
   </section>
 
-  <section class="screen" data-name="Confirm">
-    <h2>Almost done</h2>
-    <div class="sum" id="sum"></div>
-    <label for="name">Your name</label>
-    <input id="name" autocomplete="name" placeholder="John">
-    <label for="phone">Phone</label>
-    <input id="phone" type="tel" autocomplete="tel" placeholder="+372 5xxx xxxx">
-    <label for="note">Note for the barber (optional)</label>
-    <input id="note" placeholder="e.g. skin fade, keep length on top">
-    <p class="hint">Free cancellation up to 2 hours before. You'll get a reminder in Telegram.</p>
+  <section class="screen">
+    <h1>Check and confirm</h1>
+    <div id="ticket"></div>
+    <div class="field"><label for="name">Name</label><input id="name" autocomplete="name"></div>
+    <div class="field"><label for="phone">Phone</label><input id="phone" type="tel" autocomplete="tel" placeholder="+372"></div>
+    <div class="field"><label for="note">Note for the barber</label><input id="note" placeholder="Optional"></div>
+    <p class="fine">Free cancellation up to 2 hours before. We send a reminder in this chat.</p>
   </section>
 
-  <section class="screen" data-name="Done">
-    <div class="done">
-      <div class="check"><svg viewBox="0 0 52 52"><path d="M14 27l8 8 16-17" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <h2>You're booked!</h2>
-      <p class="hint" id="donetext"></p>
-    </div>
+  <section class="screen done">
+    <div class="ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Request sent</div>
+    <h1>See you there</h1>
+    <p>The confirmation arrives in the chat. Show this card at the desk.</p>
+    <div id="ticket2"></div>
   </section>
 </main>
 
@@ -147,34 +163,33 @@
 
 <script>
 const SERVICES = [
-  {id:"cut",   name:"Classic haircut", desc:"Wash, cut & style", min:45, price:25, icon:"✂️", bg:"#2b2418"},
-  {id:"fade",  name:"Skin fade",       desc:"Precision fade, sharp finish", min:50, price:30, icon:"💈", bg:"#1d2530", tag:"POPULAR"},
-  {id:"beard", name:"Beard trim",      desc:"Shape, line-up & hot towel", min:30, price:18, icon:"🧔", bg:"#26201c"},
-  {id:"combo", name:"Cut + beard",     desc:"The full package", min:75, price:40, icon:"👑", bg:"#2a2214", tag:"BEST VALUE"},
+  {id:"cut",   name:"Classic haircut", desc:"Wash, cut and style",       min:45, price:25},
+  {id:"fade",  name:"Skin fade",       desc:"Clipper fade, scissor top", min:50, price:30},
+  {id:"beard", name:"Beard trim",      desc:"Shape, line-up, hot towel", min:30, price:18},
+  {id:"combo", name:"Cut and beard",   desc:"Haircut with a full beard trim", min:75, price:40},
 ];
 const PROS = [
-  {id:"mark",  name:"Mark",  role:"Senior barber", rating:"4.9 · 312 reviews", c:"linear-gradient(135deg,#c2783a,#6e3b17)"},
-  {id:"liis",  name:"Liis",  role:"Fade specialist", rating:"5.0 · 198 reviews", c:"linear-gradient(135deg,#7a5cc2,#3a2a6e)"},
-  {id:"artur", name:"Artur", role:"Beard expert", rating:"4.8 · 254 reviews", c:"linear-gradient(135deg,#3a8fc2,#173f6e)"},
+  {id:"mark",  name:"Mark",  role:"Classic cuts, 12 years"},
+  {id:"liis",  name:"Liis",  role:"Fades and texture"},
+  {id:"artur", name:"Artur", role:"Beards and shaves"},
 ];
 const TIMES = ["10:00","10:30","11:00","11:30","12:00","12:30","13:00","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00"];
 
 const tg = window.Telegram && Telegram.WebApp;
 const inTg = !!(tg && tg.initData);
 const params = new URLSearchParams(location.search);
-// taken = "mark|2026-11-21|10:00,liis|..."
 const TAKEN = new Set((params.get("taken")||"").split(",").filter(Boolean));
 const state = {step:0, service:null, pro:null, date:null, time:null};
 const $ = s => document.querySelector(s);
 const screens = [...document.querySelectorAll(".screen")];
 const haptic = (t="light") => { try{ tg.HapticFeedback.impactOccurred(t) }catch(e){} };
-const select = () => { try{ tg.HapticFeedback.selectionChanged() }catch(e){} };
+const tick = () => { try{ tg.HapticFeedback.selectionChanged() }catch(e){} };
 
 if (inTg) {
   document.body.classList.add("tg");
   tg.ready(); tg.expand();
-  try { tg.setHeaderColor("#0e0f11"); tg.setBackgroundColor("#0e0f11"); tg.setBottomBarColor && tg.setBottomBarColor("#0e0f11"); } catch(e){}
-  tg.MainButton.setParams({color:"#d8b46a", text_color:"#1a1408"});
+  try { tg.setHeaderColor("#161513"); tg.setBackgroundColor("#161513"); tg.setBottomBarColor && tg.setBottomBarColor("#161513"); } catch(e){}
+  tg.MainButton.setParams({color:"#efe9de", text_color:"#161513"});
   tg.MainButton.onClick(next);
   tg.BackButton.onClick(back);
   const u = tg.initDataUnsafe && tg.initDataUnsafe.user;
@@ -182,97 +197,104 @@ if (inTg) {
 }
 $("#cta").onclick = next;
 
-const fmtDate = d => d.toLocaleDateString("en-GB",{weekday:"short", day:"numeric", month:"short"});
 const iso = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+const longDate = k => new Date(k+"T12:00").toLocaleDateString("en-GB",{weekday:"long", day:"numeric", month:"long"});
 const svc = () => SERVICES.find(s=>s.id===state.service);
-const pro = () => PROS.find(p=>p.id===state.pro);
+const isPast = (day,t) => new Date(`${day}T${t}:00`) < new Date(Date.now()+30*60*1000);
+const proTaken = (p,day,t) => TAKEN.has(`${p}|${day}|${t}`);
+const isTaken = (day,t) => state.pro==="any" ? PROS.every(p=>proTaken(p.id,day,t)) : proTaken(state.pro,day,t);
+const free = (day,t) => !isPast(day,t) && !isTaken(day,t);
 
-function isTaken(day, time){
-  if (state.pro === "any") return PROS.every(p => TAKEN.has(`${p.id}|${day}|${time}`));
-  return TAKEN.has(`${state.pro}|${day}|${time}`);
-}
-function isPast(day, time){
-  return new Date(`${day}T${time}:00`) < new Date(Date.now() + 30*60*1000);
+function nextFree(pid){
+  for (let i=0;i<14;i++){
+    const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+i);
+    if (d.getDay()===0) continue;
+    const k=iso(d), t=TIMES.find(t=>!isPast(k,t) && (pid==="any" ? PROS.some(p=>!proTaken(p.id,k,t)) : !proTaken(pid,k,t)));
+    if (t) return {when: i===0 ? "today" : i===1 ? "tomorrow" : d.toLocaleDateString("en-GB",{weekday:"short"}), t};
+  }
+  return null;
 }
 
 function renderServices(){
   $("#services").innerHTML = SERVICES.map(s => `
-    <div class="svc ${state.service===s.id?"sel":""}" data-id="${s.id}">
-      <div class="ic" style="background:${s.bg}">${s.icon}</div>
-      <div><div class="t">${s.name}${s.tag?`<span class="tag">${s.tag}</span>`:""}</div><div class="d">${s.desc}</div></div>
-      <div class="p">€${s.price}<small>${s.min} min</small></div>
-    </div>`).join("");
-  document.querySelectorAll(".svc").forEach(el => el.onclick = () => { state.service = el.dataset.id; select(); renderServices(); update(); });
+    <button class="row ${state.service===s.id?"sel":""}" data-id="${s.id}" aria-pressed="${state.service===s.id}">
+      <span class="radio"></span>
+      <span><span class="t">${s.name}</span><span class="d" style="display:block">${s.desc}</span></span>
+      <span class="price">€${s.price}<small>${s.min} min</small></span>
+    </button>`).join("");
+  document.querySelectorAll("#services .row").forEach(el => el.onclick = () => { state.service = el.dataset.id; tick(); renderServices(); update(); });
 }
 
 function renderPros(){
-  const any = `<div class="pro any ${state.pro==="any"?"sel":""}" data-id="any"><div class="av">✦</div><div class="n">Any barber</div><div class="r">First available</div><div class="s">Fastest option</div></div>`;
-  $("#pros").innerHTML = PROS.map(p => `
-    <div class="pro ${state.pro===p.id?"sel":""}" data-id="${p.id}">
-      <div class="av" style="background:${p.c}">${p.name[0]}</div>
-      <div class="n">${p.name}</div><div class="r">${p.role}</div><div class="s">★ ${p.rating}</div>
-    </div>`).join("") + any;
-  document.querySelectorAll(".pro").forEach(el => el.onclick = () => { state.pro = el.dataset.id; state.time = null; select(); renderPros(); update(); });
+  const rows = [...PROS, {id:"any", name:"Any barber", role:"First free chair"}];
+  $("#pros").innerHTML = rows.map(p => { const n = nextFree(p.id); return `
+    <button class="row pro ${state.pro===p.id?"sel":""}" data-id="${p.id}" aria-pressed="${state.pro===p.id}">
+      <span class="radio"></span>
+      <span class="av">${p.id==="any" ? "–" : p.name[0]}</span>
+      <span><span class="t">${p.name}</span><span class="d" style="display:block">${p.role}</span></span>
+      <span class="next">${n ? `<small>next free</small>${n.when} ${n.t}` : "<small>fully booked</small>"}</span>
+    </button>`; }).join("");
+  document.querySelectorAll("#pros .row").forEach(el => el.onclick = () => { state.pro = el.dataset.id; state.time = null; state.date = null; tick(); renderPros(); update(); });
 }
 
 function renderDates(){
   const days = [];
-  for (let i=0;i<14;i++){ const d = new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+i); days.push(d); }
-  if (!state.date) { const first = days.find(d => d.getDay()!==0 && TIMES.some(t => !isPast(iso(d),t) && !isTaken(iso(d),t))); state.date = first && iso(first); }
-  $("#dates").innerHTML = days.map(d => {
-    const k = iso(d), closed = d.getDay()===0;
-    return `<div class="date ${closed?"off":""} ${state.date===k?"sel":""}" data-d="${k}">
-      <div class="w">${d.toLocaleDateString("en-GB",{weekday:"short"})}</div><div class="dn">${d.getDate()}</div><div class="m">${d.toLocaleDateString("en-GB",{month:"short"})}</div></div>`;
-  }).join("");
-  document.querySelectorAll(".date").forEach(el => el.onclick = () => { state.date = el.dataset.d; state.time = null; select(); renderDates(); update(); });
+  for (let i=0;i<14;i++){ const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+i); days.push(d); }
+  if (!state.date){ const f = days.find(d => d.getDay()!==0 && TIMES.some(t=>free(iso(d),t))); state.date = f && iso(f); }
+  $("#dates").innerHTML = days.map(d => { const k=iso(d), closed=d.getDay()===0; return `
+    <button class="date ${closed?"off":""} ${state.date===k?"sel":""}" data-d="${k}" ${closed?'aria-disabled="true"':""}>
+      <span class="w">${d.toLocaleDateString("en-GB",{weekday:"short"})}</span><span class="dn">${String(d.getDate()).padStart(2,"0")}</span>
+    </button>`; }).join("");
+  document.querySelectorAll(".date").forEach(el => el.onclick = () => { state.date = el.dataset.d; state.time = null; tick(); renderDates(); update(); });
   renderSlots();
 }
 
 function renderSlots(){
-  const groups = [["Morning", t => t < "12:00"], ["Afternoon", t => t >= "12:00" && t < "17:00"], ["Evening", t => t >= "17:00"]];
-  const freeCount = TIMES.filter(t => !isPast(state.date,t) && !isTaken(state.date,t)).length;
-  $("#slots").innerHTML = groups.map(([label, f]) => {
-    const ts = TIMES.filter(f);
-    return `<div class="daypart">${label}${label==="Morning"?`<span class="free">· ${freeCount} slots free today</span>`:""}</div><div class="slots">` +
-      ts.map(t => { const bad = isPast(state.date,t) || isTaken(state.date,t);
-        return `<div class="slot ${bad?"taken":""} ${state.time===t?"sel":""}" data-t="${t}">${t}</div>`; }).join("") + `</div>`;
+  const parts = [["Morning", t=>t<"12:00"], ["Afternoon", t=>t>="12:00"&&t<"17:00"], ["Evening", t=>t>="17:00"]];
+  $("#slots").innerHTML = parts.map(([label,f]) => {
+    const ts = TIMES.filter(f), n = ts.filter(t=>free(state.date,t)).length;
+    return `<div class="part"><h3>${label}<small>${n} free</small></h3><div class="slots">` +
+      ts.map(t => `<button class="slot ${free(state.date,t)?"":"taken"} ${state.time===t?"sel":""}" data-t="${t}">${t}</button>`).join("") +
+      `</div></div>`;
   }).join("");
   document.querySelectorAll(".slot").forEach(el => el.onclick = () => { state.time = el.dataset.t; haptic(); renderSlots(); update(); });
 }
 
 function pickPro(){
   if (state.pro !== "any") return state.pro;
-  const free = PROS.find(p => !TAKEN.has(`${p.id}|${state.date}|${state.time}`));
-  return free ? free.id : PROS[0].id;
+  const p = PROS.find(p => !proTaken(p.id,state.date,state.time));
+  return p ? p.id : PROS[0].id;
 }
 
-function renderSum(){
-  const s = svc(), p = state.pro==="any" ? {name:"First available"} : pro();
-  const d = new Date(state.date+"T12:00");
-  $("#sum").innerHTML = `
-    <div class="row"><span>Service</span><b>${s.icon} ${s.name}</b></div>
-    <div class="row"><span>Barber</span><b>${p.name}</b></div>
-    <div class="row"><span>When</span><b>${fmtDate(d)} · ${state.time}</b></div>
-    <div class="row"><span>Duration</span><b>${s.min} min</b></div>
-    <div class="row total"><span>Total</span><b>€${s.price}</b></div>`;
+function ticket(proId){
+  const s = svc(), p = PROS.find(x=>x.id===proId);
+  return `<div class="ticket">
+    <div class="main">
+      <div class="lbl">North Cut · Telliskivi 60</div>
+      <div class="when">${state.time}</div>
+      <div class="day">${longDate(state.date)}</div>
+      <div class="what">${s.name} with ${p ? p.name : "first free barber"} · <span class="mono">${s.min} min</span></div>
+    </div>
+    <div class="stub"><span class="lbl">Total</span><b>€${s.price}</b></div>
+  </div>`;
 }
 
 function canContinue(){
-  return [!!state.service, !!state.pro, !!(state.date && state.time),
-          $("#name").value.trim().length>1 && $("#phone").value.replace(/\D/g,"").length>=7][state.step];
+  return [!!state.service, !!state.pro, !!(state.date&&state.time),
+          $("#name").value.trim().length>1 && $("#phone").value.replace(/\D/g,"").length>=7, false][state.step];
 }
 
 function update(){
-  document.querySelectorAll("#steps i").forEach((el,i) => el.classList.toggle("on", i <= state.step));
-  $("#stepname").textContent = state.step < 4 ? `Step ${state.step+1} of 4 · ${screens[state.step].dataset.name}` : "Booked";
-  const ok = canContinue();
-  const label = state.step===3 ? `Book · €${svc().price}` : "Continue";
-  $("#cta").disabled = !ok; $("#cta").textContent = label; document.querySelector(".cta").style.display = state.step===4 ? "none" : "";
+  document.querySelectorAll("#bars i").forEach((el,i) => el.classList.toggle("on", i<=state.step));
+  $("#stepname").textContent = state.step<4 ? `${state.step+1} of 4` : "Done";
+  const ok = canContinue(), last = state.step===3;
+  $("#cta").disabled = !ok;
+  $("#cta").innerHTML = last ? `Request booking<span class="mono">€${svc().price}</span>` : "Continue";
+  document.querySelector(".cta").hidden = state.step===4;
   if (inTg){
-    if (state.step===4) { tg.MainButton.hide(); tg.BackButton.hide(); return; }
-    tg.MainButton.setText(label);
-    ok ? (tg.MainButton.enable(), tg.MainButton.show()) : (state.step===0 ? tg.MainButton.hide() : tg.MainButton.disable());
-    if (!ok && state.step>0) tg.MainButton.show();
+    if (state.step===4){ tg.MainButton.hide(); tg.BackButton.hide(); return; }
+    tg.MainButton.setText(last ? `Request booking · €${svc().price}` : "Continue");
+    if (state.step===0 && !ok) tg.MainButton.hide(); else { tg.MainButton.show(); ok ? tg.MainButton.enable() : tg.MainButton.disable(); }
     state.step>0 ? tg.BackButton.show() : tg.BackButton.hide();
   }
 }
@@ -283,7 +305,7 @@ function show(i){
   if (i===0) renderServices();
   if (i===1) renderPros();
   if (i===2) renderDates();
-  if (i===3) renderSum();
+  if (i===3) $("#ticket").innerHTML = ticket(state.pro==="any" ? null : state.pro);
   window.scrollTo({top:0});
   update();
 }
@@ -292,26 +314,23 @@ function next(){
   if (!canContinue()) return;
   haptic("medium");
   if (state.step < 3) return show(state.step+1);
-  const payload = {
-    service: state.service, pro: pickPro(), date: state.date, time: state.time,
-    name: $("#name").value.trim().slice(0,60), phone: $("#phone").value.trim().slice(0,30), note: $("#note").value.trim().slice(0,200)
-  };
+  const payload = {service:state.service, pro:pickPro(), date:state.date, time:state.time,
+    name:$("#name").value.trim().slice(0,60), phone:$("#phone").value.trim().slice(0,30), note:$("#note").value.trim().slice(0,200)};
   if (inTg){ try{ tg.HapticFeedback.notificationOccurred("success") }catch(e){} tg.sendData(JSON.stringify(payload)); return; }
-  $("#donetext").textContent = `${svc().name} with ${PROS.find(p=>p.id===payload.pro).name}, ${fmtDate(new Date(state.date+"T12:00"))} at ${state.time}. Confirmation sent to Telegram.`;
+  $("#ticket2").innerHTML = ticket(payload.pro);
   show(4);
 }
-function back(){ if (state.step>0){ select(); show(state.step-1); } }
-
+function back(){ if (state.step>0){ tick(); show(state.step-1); } }
 ["#name","#phone"].forEach(s => $(s).addEventListener("input", update));
 
-// Demo preview helpers: ?step=2 or ?demo=1 jumps ahead with sample choices (used for screenshots)
+// Preview helpers for screenshots: ?step=N&demo=1
 const jump = +params.get("step");
 if (params.get("demo") || jump){ state.service="fade"; state.pro="liis"; }
 show(0);
 if (jump){
   show(1);
   if (jump>=2){ show(2); const f=[...document.querySelectorAll(".slot:not(.taken)")][2]; state.time=f&&f.dataset.t; renderSlots(); update(); }
-  if (jump>=3){ if(!$("#name").value) $("#name").value="Arseni"; $("#phone").value="+372 5123 4567"; $("#note").value="Skin fade, keep length on top"; show(3); }
+  if (jump>=3){ if(!$("#name").value) $("#name").value="Arseni"; $("#phone").value="+372 5123 4567"; $("#note").value="Keep length on top"; show(3); }
   if (jump>=4) next();
 }
 </script>
